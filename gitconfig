@@ -1,0 +1,28 @@
+[push]
+	default = simple
+[user]
+	name = Adam Lewandowski
+	email = adam.p.lewandowski@nasa.gov
+[core]
+	editor = vim
+[color]
+    branch = auto
+    diff = always
+    status = auto
+    showbranch = auto
+    ui = true
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[format]
+    pretty = '%C(yellow)%h%Creset %C(magenta)%cd%Creset %d %s'
