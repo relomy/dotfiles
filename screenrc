@@ -1,0 +1,5 @@
+# allow bold colors
+attrcolor b ".I"
+
+# enable 256 color term
+term xterm-256color
