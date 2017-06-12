@@ -22,6 +22,11 @@ echo "Changing to the $dir directory"
 cd $dir
 echo "...done"
 
+mkdir -p ~/.vim/colors
+mkdir -p ~/.vim/backups
+mkdir -p ~/.vim/swaps
+cp Tomorrow-Night-Bright.vim ~/.vim/colors
+
 # move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks 
 for file in $files; do
     echo "Moving any existing dotfiles from ~ to $olddir"
