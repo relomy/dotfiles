@@ -1,5 +1,5 @@
 [push]
-    default = matching
+    default = simple
 [user]
     name = Adam Lewandowski
     email = adam.p.lewandowski@nasa.gov
