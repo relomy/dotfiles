@@ -9,7 +9,7 @@
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
 # files="bashrc vimrc vim zshrc oh-my-zsh"    # list of files/folders to symlink in homedir
-files="gitconfig screenrc vimrc"
+files="tmux.conf gitconfig screenrc vimrc"
 ##########
 
 # create dotfiles_old in homedir
@@ -26,6 +26,7 @@ mkdir -p ~/.vim/colors
 mkdir -p ~/.vim/backups
 mkdir -p ~/.vim/swaps
 cp Tomorrow-Night-Bright.vim ~/.vim/colors
+cp monokai.vim ~/.vim/colors
 
 # move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks 
 for file in $files; do
