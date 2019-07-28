@@ -1,0 +1,24 @@
+{
+    "workbench.colorTheme": "Ayu Mirage Bordered",
+    "workbench.iconTheme": "ayu",
+    "workbench.settings.editor": "json",
+    "workbench.settings.openDefaultSettings": true,
+    "editor.fontSize": 14,
+    "editor.fontWeight": "500",
+    "editor.fontFamily": "Source Code Pro",
+    "debug.console.fontSize": 14,
+    "debug.console.fontFamily": "Source Code Pro",
+    "terminal.integrated.fontSize": 12,
+    "terminal.integrated.fontWeight": "500",
+    "terminal.integrated.fontFamily": "Source Code Pro",
+    "editor.formatOnSave": true,
+    "files.eol": "auto",
+    "python.formatting.blackArgs": [
+        "-l",
+        "100"
+    ],
+    "autoDocstring.docstringFormat": "numpy",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "python.jediEnabled": false
+}
