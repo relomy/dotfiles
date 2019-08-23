@@ -1,19 +1,38 @@
 {
-    "workbench.colorTheme": "Ayu Mirage Bordered",
+    // workbench settings
+    "workbench.colorTheme": "Dracula Soft",
     "workbench.iconTheme": "ayu",
     "workbench.settings.editor": "json",
     "workbench.settings.openDefaultSettings": true,
+    // editor settings
+    "editor.fontFamily": "Source Code Pro",
     "editor.fontSize": 14,
     "editor.fontWeight": "500",
-    "editor.fontFamily": "Source Code Pro",
+    "editor.formatOnSave": true,
+    "editor.quickSuggestionsDelay": 100,
+    "editor.suggestSelection": "first",
+    "editor.renderWhitespace": "selection",
+    // debug console settings
     "debug.console.fontSize": 14,
     "debug.console.fontFamily": "Source Code Pro",
-    "terminal.integrated.fontSize": 12,
-    "terminal.integrated.fontWeight": "500",
+    // terminal settings
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontWeight": "600",
     "terminal.integrated.fontFamily": "Source Code Pro",
-    "editor.formatOnSave": true,
-    "editor.renderWhitespace": "selection",
+    // language-specific settings
+    "[plaintext]": {
+        "editor.quickSuggestions": false
+    },
+    // python settings
+    "python.formatting.provider": "black",
+    // pylint settings
+    "python.linting.pylintArgs": [
+        "--disable=all",
+        "--enable=F,E,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode",
+        "--ignored-modules=googleapiclient.discovery"
+    ],
     "files.eol": "\n",
+    // do not show these files in vscode
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -24,11 +43,6 @@
         },
         "**/__pycache__": true,
     },
-    "autoDocstring.docstringFormat": "numpy",
-    "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "python.jediEnabled": false,
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.python"
-    }
+    "python.jediEnabled": false
 }
