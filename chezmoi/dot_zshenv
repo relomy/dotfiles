@@ -1,0 +1,11 @@
+#
+# ~/.zshenv
+#
+# Loaded by all Zsh sessions.
+# Keep this file minimal and noninteractive.
+#
+
+# Rust/Cargo environment
+if [[ -r "$HOME/.cargo/env" ]]; then
+  source "$HOME/.cargo/env"
+fi

@@ -1,0 +1,11 @@
+#chezmoi
+background-blur-radius = 20
+font-family = "JetBrains Mono"
+font-size = 16
+macos-titlebar-style = tabs
+mouse-hide-while-typing = true
+shell-integration-features = ssh-env,no-ssh-terminfo
+theme = Catppuccin Mocha
+window-padding-x = 10
+window-padding-y = 10
+custom-shader = shaders/space.glsl
