@@ -34,11 +34,6 @@ fi
 # De-duplicate PATH entries while preserving first occurrence order.
 typeset -U path PATH
 
-alias pwssh='ssh -o PreferredAuthentications=password'
-alias pivscp='scp -o PKCS11Provider=/usr/lib/ssh-keychain.dylib'
-alias kpiv='ssh-add -D && ssh-add -s /usr/lib/ssh-keychain.dylib'
-alias ksso='pkill -9 KerberosExtension AppSSOAgent KerberosMenuExtra;app-sso -a NDC.NASA.GOV -R'
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -49,12 +44,6 @@ if [[ $TERM_PROGRAM == iTerm.app ]] &&
    [[ -r "$HOME/.iterm2_shell_integration.zsh" ]]; then
   source "$HOME/.iterm2_shell_integration.zsh"
 fi
-
-# Local overrides (machine/user-specific)
-[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
-
-# Jira authentication uses macOS Keychain.
-export JIRA_AUTH_TYPE=bearer
 
 # Added by codebase-memory-mcp install
 export PATH="{{ .chezmoi.homeDir }}/.local/bin:$PATH"
@@ -98,6 +87,9 @@ if [[ -o interactive \
   fi
 fi
 
+# Local overrides (machine/user-specific, not managed by chezmoi)
+[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
 #
 # AI agent shell compatibility
 #
@@ -120,59 +112,3 @@ if [[ -n ${CLAUDECODE:-} \
   unsetopt CORRECT CORRECT_ALL
 
 fi
-# >>> headroom:managed_rtk >>>
-_headroom_path=":$PATH:"
-while case "$_headroom_path" in *:"{{ .chezmoi.homeDir }}/Library/Application Support/Headroom/headroom/bin":*) true ;; *) false ;; esac; do
-  _headroom_path=${_headroom_path%%:"{{ .chezmoi.homeDir }}/Library/Application Support/Headroom/headroom/bin":*}:${_headroom_path#*:"{{ .chezmoi.homeDir }}/Library/Application Support/Headroom/headroom/bin":}
-done
-_headroom_path=${_headroom_path#:}
-_headroom_path=${_headroom_path%:}
-export PATH="{{ .chezmoi.homeDir }}/Library/Application Support/Headroom/headroom/bin${_headroom_path:+:$_headroom_path}"
-unset _headroom_path
-# <<< headroom:managed_rtk <<<
-# >>> headroom:claude_code >>>
-__headroom_up() {
-  case ${OSTYPE-} in
-    msys*|cygwin*) if [ -x /usr/bin/timeout ]; then
-      BASH_ENV= /usr/bin/timeout 1 "${BASH:-bash}" -c ': </dev/tcp/127.0.0.1/6767' 2>/dev/null; return
-    fi ;;
-  esac
-  if [ -n "${ZSH_VERSION-}" ]; then
-    local REPLY
-    zmodload zsh/net/tcp 2>/dev/null && ztcp 127.0.0.1 6767 2>/dev/null && ztcp -c "$REPLY"
-  else
-    (: </dev/tcp/127.0.0.1/6767) 2>/dev/null
-  fi
-}
-case ${__headroom_live-} in "$$:"[01]) ;; *) if __headroom_up; then __headroom_live=$$:1; else __headroom_live=$$:0; fi ;; esac
-if [ "$__headroom_live" = "$$:1" ]; then export ANTHROPIC_BASE_URL="${ANTHROPIC_BASE_URL:-http://127.0.0.1:6767}"; elif [ "${ANTHROPIC_BASE_URL-}" = http://127.0.0.1:6767 ]; then unset ANTHROPIC_BASE_URL; fi
-# /remote-control needs api.anthropic.com; this relaunches the same session without Headroom.
-if ! alias claude >/dev/null 2>&1; then eval 'claude() {
-  local a; for a in "$@"; do [ "$a" = --remote-control ] && { set -- --settings '\''{"env":{"ANTHROPIC_BASE_URL":"https://api.anthropic.com"}}'\'' "$@"; break; }; done
-  if [ -n "${CLAUDE_CONFIG_DIR-}" ] && [ "${CLAUDE_CONFIG_DIR%/}" != "$HOME/.claude" ] && [ -z "${ANTHROPIC_BASE_URL-}" ] &&
-    command grep -qs '\''"ANTHROPIC_BASE_URL"[[:space:]]*:[[:space:]]*"http://127.0.0.1:6767"'\'' "$HOME/.claude/settings.json"; then
-    ANTHROPIC_BASE_URL=http://127.0.0.1:6767 HEADROOM_RC_RELAUNCHER=tty command claude "$@"
-  elif [ "${ANTHROPIC_BASE_URL-}" = http://127.0.0.1:6767 ] && ! __headroom_up; then
-    command env -u ANTHROPIC_BASE_URL HEADROOM_RC_RELAUNCHER=tty claude "$@"
-  else
-    HEADROOM_RC_RELAUNCHER=tty command claude "$@"
-  fi
-  local rc=$?
-  local m="$HOME/.headroom/remote-control/$(command basename "$(command tty 2>/dev/null)" 2>/dev/null)"
-  if [ -s "$m" ] && [ -n "$(command find "$m" -mmin -2 2>/dev/null)" ]; then
-    local sid; sid=$(command cat "$m"); command rm -f "$m"
-    local n=$# v=0
-    while [ "$n" -gt 0 ]; do
-      a=$1; shift; n=$((n-1))
-      if [ "$v" = 1 ]; then v=0; set -- "$@" "$a"; continue; fi
-      case $a in
-        --model|--permission-mode|--add-dir|--agent|--effort|--fallback-model|--append-system-prompt|--mcp-config|--plugin-dir) v=1; set -- "$@" "$a" ;;
-        --model=*|--permission-mode=*|--add-dir=*|--agent=*|--effort=*|--fallback-model=*|--append-system-prompt=*|--mcp-config=*|--plugin-dir=*|--dangerously-skip-permissions|--allow-dangerously-skip-permissions|--strict-mcp-config|--verbose|--ide|--chrome|--no-chrome) set -- "$@" "$a" ;;
-      esac
-    done
-    command claude --settings '\''{"env":{"ANTHROPIC_BASE_URL":"https://api.anthropic.com"}}'\'' "$@" -r "$sid" --remote-control
-    return $?
-  fi
-  return $rc
-}'; fi
-# <<< headroom:claude_code <<<
